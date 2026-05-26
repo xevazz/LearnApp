@@ -44,7 +44,7 @@ const HomeStack = () => (
     <Stack.Screen
       name="Detail"
       component={DetailScreen}
-      options={{ title: 'Course details', headerBackTitle: 'Back' }}
+      options={{ title: 'Book details', headerBackTitle: 'Back' }}
     />
   </Stack.Navigator>
 );

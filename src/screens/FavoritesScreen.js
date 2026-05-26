@@ -70,7 +70,7 @@ const FavoritesScreen = ({ navigation }) => {
             <Text style={styles.emptyIcon}>🔖</Text>
             <Text style={styles.emptyTitle}>Sin favoritos aún</Text>
             <Text style={styles.emptyText}>
-              Explora los cursos y toca el corazón para guardarlos aquí.
+              Explora los libros y toca el corazón para guardarlos aquí.
             </Text>
           </View>
         }

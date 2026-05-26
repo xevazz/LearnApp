@@ -93,7 +93,7 @@ const DetailScreen = ({ route, navigation }) => {
           <Text style={styles.noDesc}>No description available.</Text>
         ) : (
           <Text style={styles.description}>
-            {detail?.description || 'No description available for this book.'}
+            {detail?.description || 'No description available.'}
           </Text>
         )}
 

@@ -115,7 +115,7 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.searchIcon}>🔍</Text>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search courses..."
+          placeholder="Search books..."
           value={search}
           onChangeText={setSearch}
           returnKeyType="search"
@@ -123,13 +123,13 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       <Text style={styles.sectionTitle}>
-        📚 Available courses {!loading && `(${filtered.length})`}
+        📚 Available books {!loading && `(${filtered.length})`}
       </Text>
 
       {loading ? (
         <View style={styles.center}>
           <ActivityIndicator size="large" color="#4F46E5" />
-          <Text style={styles.loadingText}>Loading courses from API...</Text>
+          <Text style={styles.loadingText}>Loading books...</Text>
         </View>
       ) : error ? (
         <View style={styles.center}>
@@ -154,7 +154,7 @@ const HomeScreen = ({ navigation }) => {
           }
           ListEmptyComponent={
             <View style={styles.center}>
-              <Text style={styles.emptyText}>No courses found.</Text>
+              <Text style={styles.emptyText}>No books found.</Text>
             </View>
           }
         />

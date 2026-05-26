@@ -1,70 +1,30 @@
 // using Open Library API - free and no auth required
 const BASE_URL = 'https://openlibrary.org';
 
-// curated Unsplash photo IDs relevant to each programming topic
-// these are permanent CDN URLs, no API key needed to display them
-const TOPIC_IMAGES = {
-  python:      'photo-1526374965328-7f61d4dc18c5',
-  javascript:  'photo-1627398242454-45a1465c2479',
-  java:        'photo-1555066931-4365d14bab8c',
-  web:         'photo-1547658719-da2b51169166',
-  database:    'photo-1544383835-bda2bc66a2e2',
-  sql:         'photo-1544383835-bda2bc66a2e2',
-  data:        'photo-1504639725590-34d0984388bd',
-  machine:     'photo-1677442135703-1787eea5ce01',
-  artificial:  'photo-1677442135703-1787eea5ce01',
-  network:     'photo-1558494949-ef010cbdcc31',
-  security:    'photo-1550751827-4bd374c3f58b',
-  linux:       'photo-1629654297299-c8506221ca97',
-  unix:        'photo-1629654297299-c8506221ca97',
-  mobile:      'photo-1512941937669-90a1b58e7e9c',
-  android:     'photo-1512941937669-90a1b58e7e9c',
-  algorithms:  'photo-1635070041078-e363dbe005cb',
-  math:        'photo-1509228468518-180b8ef3c68c',
-  game:        'photo-1552820728-8b83bb6b773f',
-  devops:      'photo-1667372393119-3d4c48d07fc9',
-  cloud:       'photo-1667372393119-3d4c48d07fc9',
-  react:       'photo-1627398242454-45a1465c2479',
-  software:    'photo-1587620931955-e6b0e4b23571',
-  computer:    'photo-1516116216624-53ad0879b08c',
-  design:      'photo-1561070791-2526d30994b5',
-  typescript:  'photo-1627398242454-45a1465c2479',
-  rust:        'photo-1555066931-4365d14bab8c',
-  go:          'photo-1555066931-4365d14bab8c',
-  cpp:         'photo-1555066931-4365d14bab8c',
-  c:           'photo-1555066931-4365d14bab8c',
-};
-
-// default image for books that don't match any topic
-const DEFAULT_IMAGES = [
-  'photo-1481627834876-b7833e8f5570', // books
-  'photo-1544716278-ca5e3f4abd8c', // laptop + notebook
-  'photo-1516116216624-53ad0879b08c', // computer code
-  'photo-1587620931955-e6b0e4b23571', // code on screen
-  'photo-1518770660439-4636190af475', // technology
+// book-themed Unsplash photos used as fallback when Open Library has no cover
+const BOOK_FALLBACK_IMAGES = [
+  'photo-1481627834876-b7833e8f5570', // colorful books stacked
+  'photo-1512820790803-83ca734da794', // open book on table
+  'photo-1507842217343-583bb7270b66', // library bookshelves
+  'photo-1524995997946-a1c2e315a42f', // books on shelf
+  'photo-1456513080510-7bf3a84b82f8', // open book close-up
+  'photo-1495446815901-a7297e633e8d', // stacked books
+  'photo-1532012197267-da84d127e765', // books fanned out
+  'photo-1589998059171-988d887df646', // open book with glasses
 ];
 
 const buildUnsplashUrl = (photoId, width = 120, height = 160) =>
   `https://images.unsplash.com/${photoId}?w=${width}&h=${height}&fit=crop&auto=format&q=80`;
 
-// pick the most relevant image based on the book title and subjects
-const getRelevantImage = (title, subjects, key) => {
-  const searchText = [title, ...(subjects || [])].join(' ').toLowerCase();
-
-  for (const [keyword, photoId] of Object.entries(TOPIC_IMAGES)) {
-    if (searchText.includes(keyword)) {
-      return buildUnsplashUrl(photoId);
-    }
-  }
-
-  // fall back to a default image using a hash of the key for consistency
+// pick a consistent book image using a hash of the key so the same book always shows the same fallback
+const getBookFallbackImage = (key) => {
   let hash = 0;
   for (let i = 0; i < key.length; i++) {
     hash = (hash << 5) - hash + key.charCodeAt(i);
     hash |= 0;
   }
-  const index = Math.abs(hash) % DEFAULT_IMAGES.length;
-  return buildUnsplashUrl(DEFAULT_IMAGES[index]);
+  const index = Math.abs(hash) % BOOK_FALLBACK_IMAGES.length;
+  return buildUnsplashUrl(BOOK_FALLBACK_IMAGES[index]);
 };
 
 export const fetchCourses = async (subject = 'programming', limit = 20) => {
@@ -77,7 +37,7 @@ export const fetchCourses = async (subject = 'programming', limit = 20) => {
   const data = await response.json();
 
   return data.docs.map((doc) => {
-    const fallbackUrl = getRelevantImage(doc.title || '', doc.subject || [], doc.key);
+    const fallbackUrl = getBookFallbackImage(doc.key);
     return {
       key: doc.key,
       title: doc.title || 'No title',

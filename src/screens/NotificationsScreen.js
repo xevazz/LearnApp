@@ -59,7 +59,7 @@ const NotificationsScreen = () => {
     }
     Alert.alert(
       '📚 Test notification',
-      "You'll receive alerts about new courses and study reminders.",
+      "You'll receive alerts about new books and study reminders.",
       [{ text: 'OK' }]
     );
   };
@@ -102,7 +102,7 @@ const NotificationsScreen = () => {
 
           <View style={styles.row}>
             <View>
-              <Text style={styles.rowLabel}>New courses</Text>
+              <Text style={styles.rowLabel}>New books</Text>
               <Text style={styles.rowSub}>When new content is added</Text>
             </View>
             <Switch
